@@ -6,8 +6,21 @@ from tkinter import filedialog
 import pandas
 import time
 import random
+import os
+import sys
 
+# --- PyInstaller Resource Path Helper ---
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        # Use relative path when running in normal development environment
+        base_path = os.path.abspath(".")
 
+    return os.path.join(base_path, relative_path)
+# ----------------------------------------
 BACKGROUND_COLOR = "#B1DDC6"
 known_words = 0
 unknown_words = 0
@@ -17,10 +30,12 @@ card_back_category = "English"
 current_card = {}
 total_cards = 0
 # Load initial data
+# Use resource_path to find the bundled default CSV in the executable
+DEFAULT_CSV_PATH = resource_path("data/filipino_english_words.csv")
 try:
-    data = pandas.read_csv("data/filipino_english_words.csv")
+    data = pandas.read_csv(DEFAULT_CSV_PATH)
 except FileNotFoundError:
-    print("Error: Default data file not found. Starting with empty set.")
+    print(f"Error: Default data file not found at {DEFAULT_CSV_PATH}. Starting with empty set.")
     data = pandas.DataFrame(columns=[card_front_category, card_back_category])
 
 to_learn = data.to_dict(orient='records')
@@ -31,6 +46,7 @@ print(to_learn)
 known_label = None 
 unknown_label = None
 # -------------------------------------------------
+
 
 
 # --- Function Placeholders (Adding this back for clean button commands) ---
@@ -162,8 +178,8 @@ create_menu_bar()
 canvas = Canvas(width=800, height=526)
 canvas_center_x = 400
 canvas_center_y = 263
-card_front_image = PhotoImage(file="images/card_front.png")
-card_back_image = PhotoImage(file="images/card_back.png")
+card_front_image = PhotoImage(file=resource_path("images/card_front.png"))
+card_back_image = PhotoImage(file=resource_path("images/card_back.png"))
 canvas.front_of_card_image_ref = card_front_image
 canvas.back_of_card_image_ref = card_back_image
 card_background = canvas.create_image(canvas_center_x, canvas_center_y, image=canvas.front_of_card_image_ref)
@@ -185,11 +201,11 @@ known_label.grid(row=0, column=0, sticky="E", padx=5) # sticky="E" aligns to the
 # --- End of Score setup ---
 
 # --- Button setup (Row 2) ---
-cross_image = PhotoImage(file="images/wrong.png")
+cross_image = PhotoImage(file=resource_path("images/wrong.png"))
 unknown_button = Button(image=cross_image, highlightthickness=0, command=next_card_unknown)
 unknown_button.grid(row=2, column=0)
 
-tick_image = PhotoImage(file="images/right.png")
+tick_image = PhotoImage(file=resource_path("images/right.png"))
 known_button = Button(image=tick_image, highlightthickness=0, command=next_card_known)
 known_button.grid(row=2, column=1)
 
