@@ -1,0 +1,32 @@
+# ----------------------------------------
+# PyInstaller Build Artifacts
+# ----------------------------------------
+# PyInstaller build and distribution directories
+/build/
+/dist/
+
+# The PyInstaller spec file (can be regenerated)
+*.spec
+
+# The final executable file
+*.exe
+
+# ----------------------------------------
+# Python Environment and Cache
+# ----------------------------------------
+# Virtual environment directories
+.venv/
+venv/
+
+# Byte-compiled files
+__pycache__/
+*.pyc
+
+# ----------------------------------------
+# OS-Specific Files
+# ----------------------------------------
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
